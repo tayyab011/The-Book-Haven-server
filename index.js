@@ -82,6 +82,12 @@ async function run() {
     });
 
 
+   app.get("/books", async (req, res) => {
+     /*  console.log(req.query) */
+
+     const result = await booksCollection.find().toArray();
+     res.status(200).json({ status: true, result });
+   });
 
 
 
