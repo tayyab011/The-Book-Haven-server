@@ -25,13 +25,13 @@ const fireBaseVerifyToken = async (req, res, next) => {
       .status(401)
       .json({ status: false, message: "UnAuthorized User" });
   }
-  console.log(authorization);
+/*   console.log(authorization); */
   const token = authorization.split(" ")[1];
 
 
   try {
     const decoded = await admin.auth().verifyIdToken(token);
-      console.log("inside token",decoded);
+ /*      console.log("inside token",decoded); */
       req.token_email =decoded.email
     next();
   } catch (error) {
@@ -92,7 +92,7 @@ async function run() {
 
 
    
-    app.get("/books/:id", async (req, res) => {
+    app.get("/books/:id",fireBaseVerifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await booksCollection.findOne(query);
@@ -119,6 +119,15 @@ async function run() {
 
 
 
+ app.put("/booksByUser/:id", fireBaseVerifyToken, async (req, res) => {
+const id=req.params.id
+const idMatched={_id: new ObjectId(id)}
+const body=req.body
+const updateData = { $set: body };
+const result = await booksCollection.updateOne({ idMatched, updateData });
+
+   res.send(result);
+ });
 
 
     // Send a ping to confirm a successful connection
