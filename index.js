@@ -56,7 +56,18 @@ async function run() {
     const userCollection = db.collection("users");
     const booksCollection = db.collection("books");
 
-  
+     app.post("/users", async (req, res) => {
+       const reqBody = req.body;
+       const email = reqBody.email;
+       const existUser = await userCollection.findOne({ email: email });
+       if (existUser) {
+         return res.json({ status: false, message: "User Exist" });
+       }
+       const result = await userCollection.insertOne(reqBody);
+       res
+         .status(200)
+         .json({ status: true, result, message: "User Created SuccessFull" });
+     });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
