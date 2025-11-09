@@ -103,6 +103,22 @@ async function run() {
 
 
 
+//add user book
+  app.get("/booksByUser", fireBaseVerifyToken, async (req, res) => {
+    console.log(req.token_email);
+    console.log(req.query);
+    const email = req.query.email;
+    const query = {};
+    if (email) {
+      query.userEmail = email;
+    }
+    const result = await booksCollection.find(query).toArray();
+
+    res.send(result);
+  });
+
+
+
 
 
     // Send a ping to confirm a successful connection
