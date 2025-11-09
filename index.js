@@ -56,6 +56,7 @@ async function run() {
     const userCollection = db.collection("users");
     const booksCollection = db.collection("books");
 
+//create user
      app.post("/users", async (req, res) => {
        const reqBody = req.body;
        const email = reqBody.email;
@@ -68,6 +69,28 @@ async function run() {
          .status(200)
          .json({ status: true, result, message: "User Created SuccessFull" });
      });
+
+
+
+    app.post("/books", fireBaseVerifyToken, async (req, res) => {
+      const reqBody = req.body;
+
+      const result = await booksCollection.insertOne(reqBody);
+      res
+        .status(200)
+        .json({ status: true, result, message: "Book Created SuccessFull" });
+    });
+
+
+
+
+
+
+
+
+
+
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
