@@ -71,6 +71,16 @@ async function run() {
      });
 
 
+     // shorted home [age ] book
+ app.get("/booksSorted", async (req, res) => {
+ 
+
+   const result = await booksCollection.find().sort({ createdAt :-1}).toArray();
+   res.status(200).json({ status: true, result });
+ });
+
+
+
 
     app.post("/books", fireBaseVerifyToken, async (req, res) => {
       const reqBody = req.body;
