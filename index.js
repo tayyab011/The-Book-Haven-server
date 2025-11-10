@@ -75,9 +75,18 @@ async function run() {
  app.get("/booksSorted", async (req, res) => {
  
 
-   const result = await booksCollection.find().sort({ createdAt :-1}).toArray();
+   const result = await booksCollection.find().sort({ createdAt :-1}).limit(6).toArray();
    res.status(200).json({ status: true, result });
  });
+
+app.get("/booksSortedDissending", async (req, res) => {
+  const result = await booksCollection.find().sort({ rating: -1 }).toArray();
+  res.status(200).json({ status: true, result });
+});
+app.get("/booksSortedAssending", async (req, res) => {
+  const result = await booksCollection.find().sort({ rating: -1 }).toArray();
+  res.status(200).json({ status: true, result });
+});
 
 
 
