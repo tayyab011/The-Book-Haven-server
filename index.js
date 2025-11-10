@@ -84,7 +84,7 @@ app.get("/booksSortedDissending", async (req, res) => {
   res.status(200).json({ status: true, result });
 });
 app.get("/booksSortedAssending", async (req, res) => {
-  const result = await booksCollection.find().sort({ rating: -1 }).toArray();
+  const result = await booksCollection.find().sort({ rating: 1 }).toArray();
   res.status(200).json({ status: true, result });
 });
 
@@ -159,7 +159,34 @@ const result = await booksCollection.updateOne(idMatched, updateData );
  });
 
 
+//for bookdetails comment 
 
+app.post("/books/:id/comments", fireBaseVerifyToken, async (req, res) => {
+  const { id } = req.params;
+  const { userName, userPhoto, comment } = req.body;
+
+  if (!comment || !userName || !userPhoto) {
+    return res.status(400).json({ status: false, message: "Missing comment data" });
+  }
+
+  const newComment = {
+    userName,
+    userPhoto,
+    comment,
+    createdAt: new Date(),
+  };
+
+  try {
+    const result = await booksCollection.updateOne(
+      { _id: new ObjectId(id) },
+      { $push: { comments: newComment } }
+    );
+
+    res.status(200).json({ status: true, message: "Comment added!", result });
+  } catch (error) {
+    res.status(500).json({ status: false, message: "Failed to add comment", error });
+  }
+});
 
 
 
