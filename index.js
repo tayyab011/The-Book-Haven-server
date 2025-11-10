@@ -130,6 +130,22 @@ const result = await booksCollection.updateOne(idMatched, updateData );
  });
 
 
+ app.delete("/booksByUser/:id", fireBaseVerifyToken, async (req, res) => {
+   const id = req.params.id;
+   const idMatched = { _id: new ObjectId(id) };
+
+   const result = await booksCollection.deleteOne(idMatched);
+
+   res.send(result);
+ });
+
+
+
+
+
+
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
